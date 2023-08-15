@@ -18,15 +18,17 @@ class Game {
 
 gameList = []
 var myGame = new Game("Minecraft2", "Have played", "43");
-gameStore = JSON.stringify(myGame);
-gameList.push(myGame)
+gameList.push(JSON.stringify(myGame));
 var myGame = new Game("Minecraft3", "Want to play", "34");
-gameStore = JSON.stringify(myGame);
-gameList.push(myGame)
+gameList.push(JSON.stringify(myGame));
 
 // express testing
 app.get('/', (req, res) => {
   res.send('Express Response')
+});
+
+app.get('/games', (req, res) => {
+  res.json(gameList);
 });
 
 // listener
