@@ -15,7 +15,6 @@ class Game {
       this.hours = hours;
   }
 }
-
 gameList = []
 var myGame = new Game("Minecraft2", "Have played", "43");
 gameList.push(JSON.stringify(myGame));
@@ -27,9 +26,17 @@ app.get('/', (req, res) => {
   res.send('Express Response')
 });
 
+// sends games JSON file
 app.get('/games', (req, res) => {
   res.json(gameList);
 });
+
+// gets games JSON file
+app.get('/save/game', (req, res) => {
+  const myGameJSON = req.body;
+  console.log(myGameJSON);
+  gameList.push(myGameJSON);
+})
 
 // listener
 const server = app.listen(8080, () => {
