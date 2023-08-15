@@ -1,6 +1,13 @@
-console.log("node server up");
+console.log("node + express server up");
 
-var http = require('http');
+const express = require('express')
+const app = express();
+const cors = require('cors');
+var PORT = 8080;
+
+app.use(cors());
+
+// sample json data to test with
 class Game {
   constructor(title, status, hours) {
       this.title = title;
@@ -9,20 +16,29 @@ class Game {
   }
 }
 
-var myGame = new Game("Minecraft2", "Have played", "42");
+gameList = []
+var myGame = new Game("Minecraft2", "Have played", "43");
 gameStore = JSON.stringify(myGame);
+gameList.push(myGame)
+var myGame = new Game("Minecraft3", "Want to play", "34");
+gameStore = JSON.stringify(myGame);
+gameList.push(myGame)
 
-http.createServer(function (req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.writeHead(200, {'Content-Type': 'application/json'});
-  res.end(gameStore);
-}).listen(8080);
+// express testing
+app.get('/', (req, res) => {
+  res.send('Express Response')
+});
 
+// listener
+const server = app.listen(8080, () => {
+  console.log("server is listening on port 8080");
+});
+
+// handles the shutdown of the server
 process.on('SIGINT', () => {
-  console.log('Shutting down gracefully...');
+  console.log("Shutting down gracefully");
   server.close(() => {
-    console.log('Server has closed.');
+    console.log('server has been closed');
     process.exit(0);
   });
 });
-
