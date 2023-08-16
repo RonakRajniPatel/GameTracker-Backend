@@ -1,8 +1,11 @@
 console.log("node + express server up");
 
 const express = require('express')
-const app = express();
 const cors = require('cors');
+const bodyParser = require('body-parser');
+
+const app = express();
+app.use(bodyParser.json());
 var PORT = 8080;
 
 app.use(cors());
@@ -16,10 +19,12 @@ class Game {
   }
 }
 gameList = []
-var myGame = new Game("Minecraft2", "Have played", "43");
+var myGame = new Game("Pokemon", "Have played", "93");
 gameList.push(JSON.stringify(myGame));
-var myGame = new Game("Minecraft3", "Want to play", "34");
-gameList.push(JSON.stringify(myGame));
+console.log("initial game list");
+console.log(gameList);
+
+
 
 // express testing
 app.get('/', (req, res) => {
@@ -28,15 +33,16 @@ app.get('/', (req, res) => {
 
 // sends games JSON file
 app.get('/games', (req, res) => {
-  res.json(gameList);
+  console.log("getGames()");
+  res.json(JSON.parse(gameList));
 });
 
 // gets games JSON file
-app.get('/save/game', (req, res) => {
-  const myGameJSON = req.body;
-  console.log(myGameJSON);
-  gameList.push(myGameJSON);
-})
+app.post('/save/game', (req, res) => {
+  console.log("saveGame()");
+  const myGame = req.body;
+  gameList.push(JSON.parse(myGame));
+});
 
 // listener
 const server = app.listen(8080, () => {
