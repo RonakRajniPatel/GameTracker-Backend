@@ -20,7 +20,7 @@ class Game {
 }
 gameList = []
 var myGame = new Game("Pokemon", "Have played", "93");
-gameList.push(JSON.stringify(myGame));
+gameList.push(myGame);
 console.log("initial game list");
 console.log(gameList);
 
@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 // sends games JSON file
 app.get('/games', (req, res) => {
   console.log("getGames()");
-  res.json(JSON.parse(gameList));
+  res.json(gameList);
 });
 
 // gets games JSON file
