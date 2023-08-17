@@ -17,14 +17,20 @@ class Game {
       this.status = status;
       this.hours = hours;
   }
+  static fromJSON(json) {
+      return new Game(json.title, json.status, json.hours);
+  }
+
+  static toString() {
+      return `Title: ${this.title}, Status: ${this.status}, Hours: ${this.hours}`;
+  }
 }
+
 gameList = []
 var myGame = new Game("Pokemon", "Have played", "93");
 gameList.push(myGame);
 console.log("initial game list");
 console.log(gameList);
-
-
 
 // express testing
 app.get('/', (req, res) => {
@@ -34,14 +40,15 @@ app.get('/', (req, res) => {
 // sends games JSON file
 app.get('/games', (req, res) => {
   console.log("getGames()");
+  console.log(gameList);
   res.json(gameList);
 });
 
 // gets games JSON file
 app.post('/save/game', (req, res) => {
   console.log("saveGame()");
-  const myGame = req.body;
-  gameList.push(JSON.parse(myGame));
+  myGame = req.body;
+  gameList.push(myGame);
 });
 
 // listener
