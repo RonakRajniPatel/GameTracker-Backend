@@ -3,12 +3,23 @@ console.log("node + express server up");
 const express = require('express')
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const { Client } = require ('pg');
 
 const app = express();
 app.use(bodyParser.json());
 var PORT = 8080;
 
 app.use(cors());
+
+const client = new Client({
+  host: 'localhost',
+  port: 5432,
+  user: 'postgres',
+  password: 'oddrabbit6',
+  database: 'postgres'
+});
+
+client.connect();
 
 // sample json data to test with
 class Game {
@@ -32,23 +43,28 @@ gameList.push(myGame);
 console.log("initial game list");
 console.log(gameList);
 
-// express testing
-app.get('/', (req, res) => {
-  res.send('Express Response')
-});
 
 // sends games JSON file
-app.get('/games', (req, res) => {
-  console.log("getGames()");
-  console.log(gameList);
-  res.json(gameList);
+app.get('/games', async (req, res) => {
+    try {
+        const result = await client.query('SELECT * FROM games');
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('An error occurred while retrieving games');
+    }
 });
 
 // gets games JSON file
-app.post('/save/game', (req, res) => {
-  console.log("saveGame()");
-  myGame = req.body;
-  gameList.push(myGame);
+app.post('/save/game', async (req, res) => {
+    const game = req.body;
+    try {
+      await client.query('INSERT INTO games (title, status, hours) VALUES ($1, $2, $3)', [game.title, game.status, game.hours]);
+      res.send('Game saved');
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('An error occurred');
+    }
 });
 
 // listener
