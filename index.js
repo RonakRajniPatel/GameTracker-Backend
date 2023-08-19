@@ -43,10 +43,6 @@ gameList.push(myGame);
 console.log("initial game list");
 console.log(gameList);
 
-// express testing
-app.get('/', (req, res) => {
-  res.send('Express Response')
-});
 
 // sends games JSON file
 app.get('/games', async (req, res) => {
