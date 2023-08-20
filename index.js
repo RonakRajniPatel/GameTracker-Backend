@@ -5,7 +5,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { Client } = require ('pg');
 const axios = require('axios')
+require('dotenv').config();
 
+const clientId = process.env.IGDB_CLIENT_ID;
+const clientSecret = process.env.IGDB_CLIENT_SECRET;
 const app = express();
 app.use(bodyParser.json());
 var PORT = 8080;
@@ -38,12 +41,25 @@ class Game {
   }
 }
 
+let accessToken;
 gameList = []
-var myGame = new Game("Pokemon", "Have played", "93");
-gameList.push(myGame);
-console.log("initial game list");
-console.log(gameList);
 
+// gets access key from IGDB
+axios.post('https://id.twitch.tv/oauth2/token', null, {
+    params: {
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: 'client_credentials',
+    },
+})
+.then((response) => {
+    accessToken = response.data.access_token;
+})
+.catch((error) => {
+    console.error('Error', error);
+});
+
+// get some data from IGDB
 
 // sends games JSON file
 app.get('/games', async (req, res) => {
