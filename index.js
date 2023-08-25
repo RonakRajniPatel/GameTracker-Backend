@@ -45,9 +45,8 @@ let accessToken;
 gameList = []
 
 const query = `
-  fields name, involved_companies;
-  search "Assassins Creed";
-  where version_parent = null;
+  fields name;
+  search "Assassin's Creed";
 `;
 
 
@@ -68,9 +67,6 @@ async function fetchToken() {
         console.error('Error', error);
     });
 }
-
-
-
 
 
 
