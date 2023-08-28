@@ -2,7 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-var router = express.Router();
+var router = express.Router();``
 var PORT = 8080;
 
 // importing routes
@@ -18,7 +18,7 @@ app.use('/', frontendRoutes);
 gameList = [];
 
 // listener
-const server = app.listen(8080, () => {
+const server = app.listen(PORT, () => {
   console.log("server is listening on port 8080");
 });
 
