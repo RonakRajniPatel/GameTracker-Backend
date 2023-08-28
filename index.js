@@ -1,30 +1,19 @@
-console.log("node + express server up");
-
-const express = require('express')
+// importing modules
+const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-const { Client } = require ('pg');
-const axios = require('axios')
-require('dotenv').config();
-
-const clientId = process.env.IGDB_CLIENT_ID;
-const clientSecret = process.env.IGDB_CLIENT_SECRET;
 const app = express();
 var router = express.Router();
-app.use(bodyParser.json());
-var PORT = 8080;
 
+// importing routes
+const {fetchGames, fetchToken} = require('./routes/igdbRoutes');
+const frontendRoutes = require('./routes/frontendRoutes');
+
+// HTTP checks
+app.use(express.json());
 app.use(cors());
+app.use('/', frontendRoutes);
 
-const client = new Client({
-  host: 'localhost',
-  port: 5432,
-  user: 'postgres',
-  password: 'oddrabbit6',
-  database: 'postgres'
-});
-
-client.connect();
+var PORT = 8080;
 
 // sample json data to test with
 class Game {
@@ -41,86 +30,12 @@ class Game {
       return `Title: ${this.title}, Status: ${this.status}, Hours: ${this.hours}`;
   }
 }
-
 gameList = [];
-
-let accessToken;
-
-// gets access key from IGDB
-async function fetchToken() {
-    return axios.post('https://id.twitch.tv/oauth2/token', null, {
-        params: {
-            'client_id': clientId,
-            'client_secret': clientSecret,
-            'grant_type': 'client_credentials',
-        },
-    })
-    .then(async (response) => {
-        accessToken = response.data.access_token;
-    })
-    .catch((error) => {
-        console.error('Error', error);
-    });
-}
-
-const query = `
-  fields name;
-  search "Assassin's Creed";
-`;
-
-// sends query to IGDB
-async function fetchGames() {
-    if (!accessToken) {
-        await fetchToken();
-    }
-
-    axios.post('https://api.igdb.com/v4/games/', query, {
-        headers: {
-            'Accept': 'application/json',
-            'Client-ID': clientId,
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'text/plain',
-        },
-    })
-    .then(response => {
-        console.log(response.data);
-    })
-    .catch(err => {
-        console.error(err);
-    });
-}
-fetchGames();
-
-
-// sends games JSON file
-router.get('/games', async (req, res) => {
-    try {
-        const result = await client.query('SELECT * FROM games');
-        res.json(result.rows);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('An error occurred while retrieving games');
-    }
-});
-
-// gets games JSON file
-router.post('/save/game', async (req, res) => {
-    const game = req.body;
-    try {
-      await client.query('INSERT INTO games (title, status, hours) VALUES ($1, $2, $3)', [game.title, game.status, game.hours]);
-      res.send('Game saved');
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('An error occurred');
-    }
-});
 
 // listener
 const server = app.listen(8080, () => {
   console.log("server is listening on port 8080");
 });
-
-module.exports = router;
 
 // handles the shutdown of the server
 process.on('SIGINT', () => {
@@ -130,3 +45,5 @@ process.on('SIGINT', () => {
     process.exit(0);
   });
 });
+
+module.exports = router;
