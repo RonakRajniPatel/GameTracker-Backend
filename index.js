@@ -42,16 +42,12 @@ class Game {
   }
 }
 
+gameList = [];
+
 let accessToken;
-gameList = []
 
-const query = `
-  fields name;
-  search "Assassin's Creed";
-`;
-
+// gets access key from IGDB
 async function fetchToken() {
-    // gets access key from IGDB
     return axios.post('https://id.twitch.tv/oauth2/token', null, {
         params: {
             'client_id': clientId,
@@ -67,6 +63,12 @@ async function fetchToken() {
     });
 }
 
+const query = `
+  fields name;
+  search "Assassin's Creed";
+`;
+
+// sends query to IGDB
 async function fetchGames() {
     if (!accessToken) {
         await fetchToken();
