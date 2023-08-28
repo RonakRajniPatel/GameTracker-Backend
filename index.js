@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 var router = express.Router();
+var PORT = 8080;
 
 // importing routes
 const {fetchGames, fetchToken} = require('./routes/igdbRoutes');
@@ -13,8 +14,6 @@ const Game = require('./classes/game');
 app.use(express.json());
 app.use(cors());
 app.use('/', frontendRoutes);
-
-var PORT = 8080;
 
 gameList = [];
 
