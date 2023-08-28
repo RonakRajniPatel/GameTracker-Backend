@@ -10,6 +10,7 @@ require('dotenv').config();
 const clientId = process.env.IGDB_CLIENT_ID;
 const clientSecret = process.env.IGDB_CLIENT_SECRET;
 const app = express();
+var router = express.Router();
 app.use(bodyParser.json());
 var PORT = 8080;
 
@@ -49,8 +50,6 @@ const query = `
   search "Assassin's Creed";
 `;
 
-
-
 async function fetchToken() {
     // gets access key from IGDB
     return axios.post('https://id.twitch.tv/oauth2/token', null, {
@@ -67,8 +66,6 @@ async function fetchToken() {
         console.error('Error', error);
     });
 }
-
-
 
 async function fetchGames() {
     if (!accessToken) {
@@ -90,23 +87,11 @@ async function fetchGames() {
         console.error(err);
     });
 }
-
-
-
-
-
-
-
 fetchGames();
 
 
-
-
-
-
-
 // sends games JSON file
-app.get('/games', async (req, res) => {
+router.get('/games', async (req, res) => {
     try {
         const result = await client.query('SELECT * FROM games');
         res.json(result.rows);
@@ -117,7 +102,7 @@ app.get('/games', async (req, res) => {
 });
 
 // gets games JSON file
-app.post('/save/game', async (req, res) => {
+router.post('/save/game', async (req, res) => {
     const game = req.body;
     try {
       await client.query('INSERT INTO games (title, status, hours) VALUES ($1, $2, $3)', [game.title, game.status, game.hours]);
@@ -132,6 +117,8 @@ app.post('/save/game', async (req, res) => {
 const server = app.listen(8080, () => {
   console.log("server is listening on port 8080");
 });
+
+module.exports = router;
 
 // handles the shutdown of the server
 process.on('SIGINT', () => {
