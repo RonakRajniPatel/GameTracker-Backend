@@ -7,6 +7,7 @@ var router = express.Router();
 // importing routes
 const {fetchGames, fetchToken} = require('./routes/igdbRoutes');
 const frontendRoutes = require('./routes/frontendRoutes');
+const Game = require('./classes/game');
 
 // HTTP checks
 app.use(express.json());
@@ -15,21 +16,6 @@ app.use('/', frontendRoutes);
 
 var PORT = 8080;
 
-// sample json data to test with
-class Game {
-  constructor(title, status, hours) {
-      this.title = title;
-      this.status = status;
-      this.hours = hours;
-  }
-  static fromJSON(json) {
-      return new Game(json.title, json.status, json.hours);
-  }
-
-  static toString() {
-      return `Title: ${this.title}, Status: ${this.status}, Hours: ${this.hours}`;
-  }
-}
 gameList = [];
 
 // listener
