@@ -1,5 +1,3 @@
-//DOESNT HAVE ANY ROUTES YET
-
 const express = require('express');
 require('dotenv').config();
 var router = express.Router();
