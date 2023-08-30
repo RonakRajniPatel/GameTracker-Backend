@@ -2,13 +2,14 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-var router = express.Router();``
+var router = express.Router();
 var PORT = 8080;
 const session = require('express-session');
 
 // importing routes
 const {fetchGames, fetchToken} = require('./routes/igdbRoutes');
 const frontendRoutes = require('./routes/frontendRoutes');
+const authRoutes = require('./routes/authRoutes');
 const Game = require('./classes/game');
 
 // HTTP checks

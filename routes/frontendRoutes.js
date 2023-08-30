@@ -1,8 +1,7 @@
 const express = require('express');
 const client = require('../db/dbConfig');
 var router = express.Router()
-const app = express();
-app.use(express.json());
+router.use(express.json());
 
 client.connect();
 
