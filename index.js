@@ -9,7 +9,7 @@ const session = require('express-session');
 // importing routes
 const {fetchGames, fetchToken} = require('./routes/igdbRoutes');
 const frontendRoutes = require('./routes/frontendRoutes');
-const authRoutes = require('./routes/authRoutes');
+//const authRoutes = require('./routes/authRoutes');
 const Game = require('./classes/game');
 
 // HTTP checks
@@ -29,12 +29,12 @@ app.use(session({
 
 // testing the session
 app.get('/', (req, res) => {
-    if (req.session.views) {
-        req.session.views++;
-        res.send(`<h1>Visits: ${req.session.views}`);
+    if (req.session.views1) {
+        req.session.views1++;
+        res.send(`<h1>Visits: ${req.session.views1}</h1>`);
     } else {
-        req.session.views = 1;
-        res.send('Welcome to this website. You are visiting for the first time!');
+        req.session.views1 = 1;
+        res.send('<h1>Welcome to this website. You are visiting for the first time!</h1>');
     }
 });
 
