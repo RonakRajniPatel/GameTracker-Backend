@@ -9,13 +9,14 @@ const session = require('express-session');
 // importing routes
 const {fetchGames, fetchToken} = require('./routes/igdbRoutes');
 const frontendRoutes = require('./routes/frontendRoutes');
-//const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRoutes');
 const Game = require('./classes/game');
 
 // HTTP checks
 app.use(express.json());
 app.use(cors());
 app.use('/', frontendRoutes);
+app.use('/', authRoutes);
 
 gameList = [];
 
