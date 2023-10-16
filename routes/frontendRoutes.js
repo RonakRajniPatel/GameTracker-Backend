@@ -28,4 +28,14 @@ router.post('/save/game', async (req, res) => {
     }
 });
 
+// This is a route that will test various things by hooking it up to a button on frontend
+router.get('/test', (req, res) => {
+  try {
+    res.json("test");
+  }
+  catch (err) {
+    console.error(err);
+  }
+})
+
 module.exports = router;

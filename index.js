@@ -1,5 +1,6 @@
 // importing modules
 const express = require('express');
+const session = require('express-session');
 const cors = require('cors');
 const app = express();
 var router = express.Router();
@@ -8,16 +9,21 @@ var PORT = 8080;
 // importing routes
 const {fetchGames, fetchToken} = require('./routes/igdbRoutes');
 const frontendRoutes = require('./routes/frontendRoutes');
-const authRoutes = require('./routes/authRoutes');
+// const authRoutes = require('./routes/authRoutes');
 const Game = require('./classes/game');
 
-// HTTP checks
+// middleware
 app.use(express.json());
 app.use(cors());
+
+// app.use('/', authRoutes);
+
 app.use('/', frontendRoutes);
-app.use('/', authRoutes);
 
 gameList = [];
+
+// Testing Area
+console.log("Hi");
 
 // listener
 const server = app.listen(PORT, () => {
